@@ -9,6 +9,8 @@ const http = require('http'),
   
   const url = require('url');
   var addr = 'http://localhost:8080/default.htm?year=2017&month=february';
+http.createServer((request, response) => {
+  var addr = request.url
   var q = url.parse(addr, true);
 
   if (q.pathname.includes('documentation')){
