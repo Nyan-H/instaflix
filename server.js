@@ -21,6 +21,16 @@ http.createServer((request, response) => {
       console.log('Added to log.');
     }
   });
+
+  fs.readFile(filePath, function(err, data){
+    if (err){
+      throw err;
+    }
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write(data);
+    response.end();
+  })
+
 }).listen(8080);
 
 
