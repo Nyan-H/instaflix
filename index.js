@@ -1,5 +1,7 @@
 const express = require('express'),
+    morgan = require('morgan');
 const app  = express();
+app.use(morgan('common'));
 //top ten movies
 let topMovies = [ {
     title: 'Inception'
