@@ -38,7 +38,6 @@ let topMovies = [ {
     title: 'Get Out'
 },
 
-]app.use(function (err, req, res, next){
 ]
 
 // Get Requests
