@@ -1,3 +1,5 @@
+const express = require('express'),
+const app  = express();
 //top ten movies
 let topMovies = [ {
     title: 'Inception'
@@ -30,4 +32,7 @@ let topMovies = [ {
     title: 'Get Out'
 },
 
-]
+]app.use(function (err, req, res, next){
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
