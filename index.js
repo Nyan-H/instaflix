@@ -2,9 +2,6 @@ const express = require('express'),
     morgan = require('morgan');
 
 const app  = express();
-app.use(express.static('public'));
-app.use(morgan('common'));
-
 
 //top ten movies
 let topMovies = [ {
@@ -40,7 +37,10 @@ let topMovies = [ {
 
 ]
 
-// Get Requests
+
+app.use(morgan('common'));
+
+app.use(express.static('public'));
 
 app.get('/movies', function(req, res) {
     res.json(topMovies)
