@@ -8,39 +8,8 @@ const Users = Models.User;
 
 const app  = express();
 
-//top ten movies
-let topMovies = [ {
-  title: 'Inception'
-},
-{
-  title: 'Jusrasic Park'
-},
-{
-  title: 'Shutter Island'
-},
-{
-  title: 'Pulp Fiction'
-},
-{
-  title: 'Elf'
-},
-{
-  title: 'A Quiet Place'
-},
-{
-  title: 'Black Panther'
-},
-{
-  title: 'Us'
-},
-{
-  title: 'Logan'
-},
-{
-  title: 'Get Out'
-},
 
-]
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
 
 
 app.use(morgan('common'));
