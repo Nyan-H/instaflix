@@ -1,5 +1,10 @@
-const express = require('express'),
+const express = require('express');
 morgan = require('morgan');
+const mongoose = require('mongoose');
+const Models = require('./models.j');
+
+const Movies = Models.Movie;
+const Users = Models.User;
 
 const app  = express();
 
