@@ -1,11 +1,12 @@
 const express = require('express');
-morgan = require('morgan');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const bodyParser = require('body-parser');
+
 
 const Movies = Models.Movie;
 const Users = Models.User;
-
 const app  = express();
 
 
@@ -16,18 +17,76 @@ app.use(morgan('common'));
 
 app.use(express.static('public'));
 
-app.get('/movies', function(req, res) {
-  res.json(topMovies)
-});
-
 app.get('/', function(req, res) {
   res.send('Welcome to Instaflix, Instant Flix on demand!')
 });
 
-app.get('/movies/:name', (req, res) => {
-  res.json(Students.find( (student) =>
-    { return student.name === req.params.name   }));
+//Look at all the movies
+app.get('/movies', (req, res) => {
+  Movies.find()
+  .then(function(movie){
+    res.status(201).json(movie);
+  })
+  .catch(function(err){
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
 });
+
+//Search Movie by their Tile 
+app.get('/movies/:Title', (req, res) => {
+  Movies.findOne({Title: req.params.Title})
+  .then(function(movie){
+    if(movie){
+      res.json(movie);
+    }else{
+      res.status(400).send(req.params.Title + " does not exist");
+    }
+  })
+  .catch(function(err){
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
+
+// Get all users
+app.get('/users', function(req, res) {
+
+  Users.find()
+  .then(function(users) {
+    res.status(201).json(users)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
+
+//Add a new user
+app.post('/users', function(req, res) {
+    Users.findOne({ Username : req.body.Username })
+    .then(function(user) {
+      if (user) {
+        return res.status(400).send(req.body.Username + "already exists");
+      } else {
+        Users
+        .create({
+          Username: req.body.Username,
+          Password: req.body.Password,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday
+        })
+        .then(function(user) {res.status(201).json(user) })
+        .catch(function(error) {
+          console.error(error);
+          res.status(500).send("Error: " + error);
+        })
+      }
+    }).catch(function(error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
+  });
  
 
 
