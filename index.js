@@ -62,11 +62,12 @@ app.get('/users/:Username', function(req, res) {
   });
 });
 
+//Add a ner user
 app.post('/users', function(req, res) {
   Users.findOne({ Username : req.body.Username })
   .then(function(user) {
     if (user) {
-      return res.status(400).send(req.body.Username + "already exists");
+      return res.status(400).send(req.body.Username + " already exists");
     } else {
       Users
       .create({
@@ -100,7 +101,25 @@ app.get('/users', function(req, res) {
   });
 });
 
-
+// Update a user's information, by username
+app.put('/users/:Username', function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, { $set :
+  {
+    Username : req.body.Username,
+    Password : req.body.Password,
+    Email : req.body.Email,
+    Birthday : req.body.Birthday
+  }},
+  { new : true }, // This line makes sure that the updated document is returned
+  function(err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: " +err);
+    } else {
+      res.json(updatedUser)
+    }
+  })
+});
 
 
 
