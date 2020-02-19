@@ -121,6 +121,36 @@ app.put('/users/:Username', function(req, res) {
   })
 });
 
+// Delete a user by username
+app.delete('/users/:Username', function(req, res) {
+  Users.findOneAndRemove({ Username: req.params.Username })
+  .then(function(user) {
+    if (!user) {
+      res.status(400).send(req.params.Username + " was not found");
+    } else {
+      res.status(200).send(req.params.Username + " was deleted.");
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.listen(8080, () =>
