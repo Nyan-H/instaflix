@@ -3,7 +3,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 const bodyParser = require('body-parser');
-
+const passport = require('passport');
+require('./passport');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -14,6 +15,7 @@ mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true})
 app.use(morgan('common'));
 app.use(express.static('public'));
 app.use(bodyParser.json());
+var auth = require('./auth')(app);
 
 app.get('/', function(req, res) {
   res.send('Welcome to Instaflix, Instant Flix on demand!')
