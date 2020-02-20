@@ -22,7 +22,7 @@ app.get('/', function(req, res) {
 });
 
 //Look at all the movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), function (req, res) => {
   Movies.find()
   .then(function(movie){
     res.status(201).json(movie);
