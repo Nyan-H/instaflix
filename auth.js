@@ -1,4 +1,4 @@
-var jwtSecret = 'instaflix-key';
+var jwtSecret = 'my__secret__key';
 var jwt = require ('jsonwebtoken');
 const passport = require('passport');
 require('./passport');

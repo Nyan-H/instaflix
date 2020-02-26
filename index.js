@@ -5,7 +5,7 @@ const Models = require('./models.js');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 require('./passport');
-
+const cors = require('cors');
 const Movies = Models.Movie;
 const Users = Models.User;
 const app  = express();
@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true})
 app.use(morgan('common'));
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(cors());
 var auth = require('./auth')(app);
 
 app.get('/', function(req, res) {
@@ -22,16 +23,16 @@ app.get('/', function(req, res) {
 });
 
 //Look at all the movies
-app.get('/movies', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get("/movies", passport.authenticate('jwt', { session: false }), function(req, res) {
   Movies.find()
-  .then(function(movie){
-    res.status(201).json(movie);
-  })
-  .catch(function(err){
-    console.error(err);
-    res.status(500).send("Error: " + err);
-  });
+    .then(function(movies) {
+      res.status(201).json(movies);
+    }).catch(function(error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
 });
+
 
 //Search Movie by their Tile 
 app.get('/movies/:Title', (req, res) => {
