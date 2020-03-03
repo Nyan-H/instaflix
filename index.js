@@ -67,7 +67,8 @@ app.get('/users/:Username', function(req, res) {
 
 //Add a ner user
 app.post('/users', function(req, res) {
-  Users.findOne({ Username : req.body.Username })
+  var hashedPassword = Users.hashPassword(req.body.Password);
+  Users.findOne({ Username : req.body.Username }) //this searches to see if user exists already
   .then(function(user) {
     if (user) {
       return res.status(400).send(req.body.Username + " already exists");
