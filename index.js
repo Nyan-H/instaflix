@@ -9,6 +9,20 @@ const cors = require('cors');
 const Movies = Models.Movie;
 const Users = Models.User;
 const app  = express();
+const { check, validationResult} = require('express-validator');
+
+var allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); 
+    if(allowedOrigins.indexOf(origin) === -1){ //is a specific origin isn't found on the list of allowed origins
+      var message = 'The CORS policy for this application doesnt allow access from origin' + origin;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  }
+}));
+
 
 
 mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true})
@@ -66,7 +80,16 @@ app.get('/users/:Username', function(req, res) {
 });
 
 //Add a ner user
-app.post('/users', function(req, res) {
+app.post('/users', 
+  [check('Username', 'Username is required').isLength({min: 10}),
+  check('Username', 'Username conatins non alphanumeric charachters - now allowed').isAlphanumeric(),
+  check('Password', 'Password is required').isnot().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()], (req, res) => {
+  
+  var errors = validationResult(req);
+  if (!errors.isEmpty()){
+    return res.status(422).json({errors: errors.arrary()});
+  }
   var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username }) //this searches to see if user exists already
   .then(function(user) {
